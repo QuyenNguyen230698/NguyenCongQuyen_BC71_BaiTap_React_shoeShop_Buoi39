@@ -1,23 +1,20 @@
 import logo from './logo.svg';
 import './App.css';
+import Headers from './ShoeShop/components/Headers';
+import HomePage from './ShoeShop/Pages/HomePage/HomePage';
+import { Routes, Route } from 'react-router-dom';
+import CartPage from './ShoeShop/Pages/CartPage/CartPage';
+import DetailPage from './ShoeShop/Pages/DetailPage/DetailPage';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <Headers/>
+      <Routes>
+      <Route path="/" element={<HomePage/>}/>
+      <Route path='/cart' element={<CartPage/>} />
+      <Route path='/detail/:id' element={<DetailPage/>} />
+      </Routes>
     </div>
   );
 }
