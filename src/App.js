@@ -8,7 +8,7 @@ import DetailPage from './ShoeShop/Pages/DetailPage/DetailPage';
 
 function App() {
   return (
-    <div className="container">
+    <div>
       <Headers/>
       <Routes>
       <Route path="/" element={<HomePage/>}/>

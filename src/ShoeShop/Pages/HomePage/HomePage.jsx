@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { http } from "../../services/config";
 import { Card } from "antd";
 import { NavLink } from "react-router-dom";
+import CartPage from "../CartPage/CartPage";
+import Swal from "sweetalert2";
 
 export default function HomePage() {
   let [cart, setcart] = useState([]);
   let [listShoe, setlistShoe] = useState([]);
+  
   let addCart = (shoe) => {
     let newCart = [...cart];
     let index = cart.findIndex((item) => item.id === shoe.id);
@@ -14,9 +17,33 @@ export default function HomePage() {
     } else {
         newCart.push({ ...shoe, total: 1 });
     }
-    console.log('newCart',newCart);
     setcart(newCart);
   };
+  let deleteCart = (idshoe) => {
+    let newCart = cart.filter((item) => item.id !== idshoe);
+    setcart(newCart);
+  }
+  let upDownShoe = (idshoe,option) => {
+    let newCart = [...cart];
+    let index = cart.findIndex((item) => item.id === idshoe);
+    // newCart[index].total += option;
+    let newTotal = newCart[index].total + option;
+
+    // Đảm bảo total không nhỏ hơn 1
+    newCart[index].total = Math.max(newTotal, 1);
+    setcart(newCart);
+  }
+  let renderDetail = (shoe) => {
+    Swal.fire({
+      title: shoe.name,
+      text: shoe.description,
+      imageUrl: shoe.image,
+      imageWidth: 300,
+      imageHeight: 300,
+      imageAlt: "Custom image",
+    });
+  }
+  // lấy API
   useEffect(() => {
     http
       .then((result) => {
@@ -26,15 +53,21 @@ export default function HomePage() {
         console.log("err", err);
       });
   }, []);
+// check cart khi thay đổi
+  useEffect(() => {
+    console.log("cart in homepage", cart);
+  }, [cart]);
 
   return (
-    <div className="row">
+    <div className="row text-center">
+      <div className="row col-6">
+        <h2>List Product</h2>
       {listShoe.map((item, index) => {
         return (
-          <div key={index} className="card text-start col-3">
-            <img src={item.image} style={{ height: 300, object: "fit" }} />
+          <div key={index} className="card text-start col-4">
+            <img src={item.image} style={{ height: 200, object: "fit",width:200 }} />
             <div className="card-body">
-              <h5 className="card-title text-center">{item.name}</h5>
+              <h5 style={{ height:50 }} className="card-title text-center">{item.name}</h5>
               <div className="text-center">
                 <button
                   className="btn btn-danger"
@@ -42,17 +75,17 @@ export default function HomePage() {
                 >
                   Buy
                 </button>
-                <NavLink
-                  className="btn btn-dark mx-1"
-                  to={`/detail/${item.quantity}`}
-                >
-                  Detail
-                </NavLink>
+                <button onClick={()=>{renderDetail(item)}} className="btn btn-dark mx-1"
+                  to={`/${item.quantity}`}>Detail</button>
               </div>
             </div>
           </div>
         );
       })}
+      </div>
+      <div className="col-6">
+        <CartPage cart={cart} deleteCart={deleteCart} upDownShoe={upDownShoe}/>
+      </div>
     </div>
   );
 }
