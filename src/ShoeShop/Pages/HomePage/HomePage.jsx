@@ -6,9 +6,10 @@ import CartPage from "../CartPage/CartPage";
 import Swal from "sweetalert2";
 
 export default function HomePage() {
+  // tạo state cho cart và listShoe
   let [cart, setcart] = useState([]);
   let [listShoe, setlistShoe] = useState([]);
-  
+  // tạo hàm addCart
   let addCart = (shoe) => {
     let newCart = [...cart];
     let index = cart.findIndex((item) => item.id === shoe.id);
@@ -19,10 +20,12 @@ export default function HomePage() {
     }
     setcart(newCart);
   };
+  // tạo hàm deleteCart
   let deleteCart = (idshoe) => {
     let newCart = cart.filter((item) => item.id !== idshoe);
     setcart(newCart);
   }
+  // tạo hàm upDownShoe
   let upDownShoe = (idshoe,option) => {
     let newCart = [...cart];
     let index = cart.findIndex((item) => item.id === idshoe);
@@ -33,6 +36,7 @@ export default function HomePage() {
     newCart[index].total = Math.max(newTotal, 1);
     setcart(newCart);
   }
+  // tạo hàm renderDetail
   let renderDetail = (shoe) => {
     Swal.fire({
       title: shoe.name,
@@ -84,6 +88,7 @@ export default function HomePage() {
       })}
       </div>
       <div className="col-6">
+        {/* truyền dữ liệu từ cha homepage qua con cartpage */}
         <CartPage cart={cart} deleteCart={deleteCart} upDownShoe={upDownShoe}/>
       </div>
     </div>

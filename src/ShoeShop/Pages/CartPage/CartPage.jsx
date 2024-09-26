@@ -1,6 +1,7 @@
 import React, { memo, useState } from "react";
 
  function CartPage({cart,deleteCart,upDownShoe}) {
+  // hiên thị giỏ hàng
     const renderCart = () => {
         if (!Array.isArray(cart) || cart.length === 0) {
             return (
